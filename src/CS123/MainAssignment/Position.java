@@ -1,3 +1,5 @@
+package CS123.MainAssignment;
+
 /**
  * Created by qinusty on 10/03/16.
  */
@@ -45,5 +47,10 @@ public class Position {
         int result = x;
         result = 31 * result + y;
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "[" + x + ", " + y + "]";
     }
 }
