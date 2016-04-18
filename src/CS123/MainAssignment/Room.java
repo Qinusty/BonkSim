@@ -1,7 +1,6 @@
 package CS123.MainAssignment;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * Created by qinusty on 10/03/16.
@@ -11,7 +10,7 @@ public class Room {
     private Position position;
     private ArrayList<Being> beings;
     private final ArrayList<Position> connectingRooms;
-    private Random random;
+
 
     /* Public Methods */
 
@@ -22,7 +21,6 @@ public class Room {
     public Room(Position p) {
         position = p;
         beings = new ArrayList<>();
-        random = new Random();
         connectingRooms = World.getInstance().calculateConnectingRooms(this.position);
     }
 

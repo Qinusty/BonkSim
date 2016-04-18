@@ -26,7 +26,6 @@ public class World {
 
     /* Public Methods*/
     public World() {
-
     }
 
     public void initialise() {
@@ -51,7 +50,7 @@ public class World {
                 ArrayList<Being> beings = new ArrayList<>(r.getBeings());
                 for (Being b : beings) {
                     if (b instanceof Bonk) {
-                        if (((Bonk)b).isAlive()) {
+                        if (((Bonk) b).isAlive()) {
                             gameOver = false;
                         }
                     }
@@ -63,9 +62,27 @@ public class World {
                 }
             }
         }
-        System.out.println("Cycle: " + cycleCount);
-        displayGridWorld();
+        
+        int bonkCount = getBonkCount();
+        System.out.println("Cycle: " + cycleCount + " - BonkCount: " + bonkCount);
+        if (bonkCount == 0)
+            gameOver = true;
+        //displayGridWorld();
         cycleCount ++;
+    }
+
+    public int getBonkCount() {
+        int bonkCounter = 0;
+        for (Room[] col : gridWorld) {
+            for (Room r : col) {
+                for (Being b : r.getBeings()) {
+                    if (b instanceof Bonk && ((Bonk) b).isAlive()) {
+                        bonkCounter ++;
+                    }
+                }
+            }
+        }
+        return bonkCounter;
     }
 
 

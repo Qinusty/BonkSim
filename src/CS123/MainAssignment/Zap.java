@@ -5,7 +5,7 @@ import java.util.Random;
 /**
  * Created by qinusty on 10/03/16.
  */
-public class Zap implements Being {
+public class Zap implements Being, Movable {
 
     /* Static Variables */
     private static int productionCount;
@@ -31,11 +31,10 @@ public class Zap implements Being {
     public void act() throws CannotActException {
         /* Kill All in room */
         killCount += room.killBonks();
-
         /* Move */
         move();
     }
-
+    @Override
     public void move() {
         int move = random.nextInt(room.getConnectingRooms().size() + 1); // if 0, don't move
         if (move > 0) {
