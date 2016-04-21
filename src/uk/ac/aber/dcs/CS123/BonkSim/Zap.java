@@ -1,21 +1,20 @@
-package CS123.MainAssignment;
+package uk.ac.aber.dcs.CS123.BonkSim;
 
-import java.util.Random;
 
 /**
  * Created by qinusty on 10/03/16.
  */
-public class Zap implements Being, Movable {
+public class Zap
+        extends MovableBeing {
 
     /* Static Variables */
     private static int productionCount;
-    private static Random random = new Random();
+
     public static int getProductionCount() { return productionCount; }
 
     /* Instance Variables */
     private String name;
     private int killCount;
-    private Room room;
 
     public Zap() {
         name = "ZAP{" + (productionCount++) + "}";
@@ -34,13 +33,10 @@ public class Zap implements Being, Movable {
         /* Move */
         move();
     }
+
     @Override
     public void move() {
-        int move = random.nextInt(room.getConnectingRooms().size() + 1); // if 0, don't move
-        if (move > 0) {
-            // Move to connectingRoom index move-1
-            room.moveBeing(this, room.getPosition(), room.getConnectingRooms().get(move-1));
-        }
+        super.move();
     }
 
     public int getKillCount() {
@@ -53,12 +49,13 @@ public class Zap implements Being, Movable {
     }
 
     @Override
-    public Position getLocation() {
-        return room.getPosition();
+    public void setLocation(Position location) {
+        super.setLocation(location);
     }
 
     @Override
-    public void setLocation(Position location) {
-        this.room = World.getInstance().getRoom(location);
+    public Position getLocation() {
+        return super.getLocation();
     }
 }
+

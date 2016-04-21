@@ -1,4 +1,4 @@
-package CS123.MainAssignment;
+package uk.ac.aber.dcs.CS123.BonkSim;
 
 /**
  * Created by qinusty on 10/03/16.
@@ -19,7 +19,7 @@ public class GameEngine {
         do {
             world.performCycle();
             try {
-                Thread.sleep(10);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 System.err.println("ERROR: Can't sleep (Interrupted exception)");
             }

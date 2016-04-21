@@ -1,4 +1,4 @@
-package CS123.MainAssignment;
+package uk.ac.aber.dcs.CS123.BonkSim;
 
 import java.util.LinkedList;
 import java.util.Random;
@@ -6,10 +6,12 @@ import java.util.Random;
 /**
  * Created by qinusty on 10/03/16.
  */
-public class Bonk implements Being, Mortal, Movable {
+public class Bonk
+        extends MovableBeing
+        implements Mortal {
+
     /* Static Variables */
     private static int productionCount;
-    private static Random random = new Random();
 
     public static int getProductionCount() {
         return productionCount;
@@ -21,7 +23,6 @@ public class Bonk implements Being, Mortal, Movable {
     private int birthCycle;
     private int lastReproduced;
     private int lastActed;
-    private Room room;
     private boolean alive;
     private LinkedList<Bonk> parents;
     private LinkedList<Bonk> children;
@@ -29,9 +30,9 @@ public class Bonk implements Being, Mortal, Movable {
     /* Public Methods */
 
     /**
-     * Constructor which allows you to give the CS123.MainAssignment.Bonk a name and a gender.
+     * Constructor which allows you to give the uk.ac.aber.dcs.CS123.BonkSim.Bonk a name and a gender.
      *
-     * @param gender The CS123.MainAssignment.Gender of the CS123.MainAssignment.Bonk.
+     * @param gender The uk.ac.aber.dcs.CS123.BonkSim.Gender of the uk.ac.aber.dcs.CS123.BonkSim.Bonk.
      */
     public Bonk(Gender gender) {
         this();
@@ -47,22 +48,22 @@ public class Bonk implements Being, Mortal, Movable {
     }
 
     /**
-     * Default constructor for the CS123.MainAssignment.Bonk class.
+     * Default constructor for the uk.ac.aber.dcs.CS123.BonkSim.Bonk class.
      */
     public Bonk() {
         // Set name to productionCount, then add one to production count.
         name = "BONK{" + (productionCount++) + "}";
         birthCycle = World.getInstance().getCycleCount();
-        lastReproduced = World.getInstance().getCycleCount();
+        resetLastReproduced();
         alive = true;
         parents = new LinkedList<>();
         children = new LinkedList<>();
     }
 
     /**
-     * Gets the gender of the CS123.MainAssignment.Bonk
+     * Gets the gender of the uk.ac.aber.dcs.CS123.BonkSim.Bonk
      *
-     * @return Returns the CS123.MainAssignment.Gender of the CS123.MainAssignment.Bonk.
+     * @return Returns the uk.ac.aber.dcs.CS123.BonkSim.Gender of the uk.ac.aber.dcs.CS123.BonkSim.Bonk.
      */
     public Gender getGender() {
         return gender;
@@ -101,30 +102,20 @@ public class Bonk implements Being, Mortal, Movable {
 
     @Override
     public void act() throws CannotActException {
-        if (isAlive() && World.getInstance().getCycleCount() - lastActed > 0) {
+        if (isAlive() && World.getInstance().getCycleCount() - getLastActed() > 0) {
             /* Reproduction */
             if (ableToBreed()) {
                 reproduce(room.findMate(this));
             }
             /* Move to random connecting room or stay */
             move();
-            lastActed = World.getInstance().getCycleCount();
+            resetLastActed();
         }
     }
 
-    /**
-     * Has a chance to move the Bonk
-     */
     @Override
     public void move() {
-        int move = random.nextInt(room.getConnectingRooms().size() + 1); // if 0, don't move
-        if (move > 0) {
-            //System.out.print(name + ": Moving from " + this.room.getPosition().toString() + " to ");
-            // Move to connectingRoom index move-1
-            room.moveBeing(this, room.getPosition(), room.getConnectingRooms().get(move - 1));
-            //System.out.println(this.room.getPosition().toString());
-        }
-
+        super.move();
     }
 
     @Override
@@ -137,6 +128,7 @@ public class Bonk implements Being, Mortal, Movable {
         this.room = World.getInstance().getRoom(location);
     }
 
+    @Override
     public boolean isAlive() {
         return alive;
     }

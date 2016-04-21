@@ -1,4 +1,4 @@
-package CS123.MainAssignment;
+package uk.ac.aber.dcs.CS123.BonkSim;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -67,7 +67,7 @@ public class World {
         System.out.println("Cycle: " + cycleCount + " - BonkCount: " + bonkCount);
         if (bonkCount == 0)
             gameOver = true;
-        //displayGridWorld();
+        displayGridWorld();
         cycleCount ++;
     }
 
@@ -110,7 +110,7 @@ public class World {
     /**
      * Calculates all possible connecting rooms based on a position and returns an ArrayList of their positions
      * @param pos The position to check for connecting rooms.
-     * @return Returns an ArrayList of CS123.MainAssignment.Position which represent the positions of connecting rooms.
+     * @return Returns an ArrayList of uk.ac.aber.dcs.CS123.BonkSim.Position which represent the positions of connecting rooms.
      */
     public ArrayList<Position> calculateConnectingRooms(Position pos) {
         ArrayList<Position> ret = new ArrayList<>();

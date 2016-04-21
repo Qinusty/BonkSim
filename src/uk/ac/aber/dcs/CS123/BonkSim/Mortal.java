@@ -1,4 +1,4 @@
-package CS123.MainAssignment;
+package uk.ac.aber.dcs.CS123.BonkSim;
 
 /**
  * Created by qinusty on 10/03/16.
@@ -9,4 +9,6 @@ public interface Mortal {
      * @return returns the age of the mortal.
      */
     public int getAge();
+
+    public boolean isAlive();
 }

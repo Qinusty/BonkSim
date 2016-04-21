@@ -1,4 +1,4 @@
-package CS123.MainAssignment;
+package uk.ac.aber.dcs.CS123.BonkSim;
 
 import java.util.ArrayList;
 
@@ -15,7 +15,7 @@ public class Room {
     /* Public Methods */
 
     /**
-     * CS123.MainAssignment.Room constructor which takes the position of the room and also calls the default constructor.
+     * uk.ac.aber.dcs.CS123.BonkSim.Room constructor which takes the position of the room and also calls the default constructor.
      * @param p
      */
     public Room(Position p) {
@@ -30,8 +30,8 @@ public class Room {
 
     /**
      * Finds a mate which is compatible with the bonk passed as a parameter and meets the eligibility defined
-     * in CS123.MainAssignment.Bonk.ableToBreed()
-     * @param bonk The CS123.MainAssignment.Bonk which needs a mate found.
+     * in uk.ac.aber.dcs.CS123.BonkSim.Bonk.ableToBreed()
+     * @param bonk The uk.ac.aber.dcs.CS123.BonkSim.Bonk which needs a mate found.
      * @return Returns an eligible Mate or can return null if no eligible mate found.
      */
     public Bonk findMate(Bonk bonk) {
@@ -49,16 +49,16 @@ public class Room {
         return null;
     }
     /**
-     * Adds a being to the CS123.MainAssignment.Room.
-     * @param b CS123.MainAssignment.Being to add.
+     * Adds a being to the uk.ac.aber.dcs.CS123.BonkSim.Room.
+     * @param b uk.ac.aber.dcs.CS123.BonkSim.Being to add.
      */
     public void addBeing(Being b) {
         beings.add(b);
         b.setLocation(position);
     }
     /**
-     * Removes a being from the CS123.MainAssignment.Room.
-     * @param b CS123.MainAssignment.Being to add.
+     * Removes a being from the uk.ac.aber.dcs.CS123.BonkSim.Room.
+     * @param b uk.ac.aber.dcs.CS123.BonkSim.Being to add.
      */
     public void moveBeing(Being b, Position from, Position to) {
         boolean successfullyRemoved = World.getInstance().getRoom(from).getBeings().remove(b);
