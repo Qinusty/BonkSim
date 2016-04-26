@@ -17,7 +17,7 @@ public class Zap
     private int killCount;
 
     public Zap() {
-        name = "ZAP{" + (productionCount++) + "}";
+        name = "Z" + (productionCount++);
         killCount = 0;
     }
 

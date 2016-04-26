@@ -7,9 +7,7 @@ import java.util.Random;
  * Created by qinusty on 10/03/16.
  */
 public class World {
-    /* Constants */
-    private final int width = 20;
-    private final int height = 20;
+
     /* Singleton */
     private static World instance = null;
     public static World getInstance() {
@@ -23,18 +21,29 @@ public class World {
     private boolean gameOver;
     private Random random;
     private int cycleCount;
+    private int[] bonkPopulations;
+    private int startingBonks;
+    private int startingZaps;
+    private int width;
+    private int height;
 
     /* Public Methods*/
     public World() {
     }
 
-    public void initialise() {
+    public void initialise(int maxCycles, int startBonks, int startZaps, int width, int height) {
+        startingBonks = startBonks;
+        startingZaps = startZaps;
+        this.width = width;
+        this.height = height;
         gridWorld = new Room[width][height];
         initRooms();
         gameOver = false;
         random = new Random();
         cycleCount = 0;
         populateRooms();
+        bonkPopulations = new int[maxCycles];
+
     }
 
     /**
@@ -43,6 +52,9 @@ public class World {
     public void performCycle() {
         // gameOver is always true unless a living bonk is found.
         gameOver = true;
+        int bonkCount = getBonkCount();
+        bonkPopulations[cycleCount] = bonkCount;
+        System.out.println("Cycle: " + cycleCount + " - BonkCount: " + bonkCount);
         for (Room[] col : gridWorld) {
             for (Room r : col) {
                 // Creates a copy of the list for us to iterate through despite
@@ -62,13 +74,18 @@ public class World {
                 }
             }
         }
-        
-        int bonkCount = getBonkCount();
-        System.out.println("Cycle: " + cycleCount + " - BonkCount: " + bonkCount);
+
+        bonkCount = getBonkCount();
         if (bonkCount == 0)
             gameOver = true;
-        displayGridWorld();
+        displayGridWorldNicely();
         cycleCount ++;
+    }
+
+    public void endGame() {
+        if (gameOver) {
+            bonkPopulations[cycleCount] = getBonkCount();
+        }
     }
 
     public int getBonkCount() {
@@ -95,6 +112,14 @@ public class World {
         return gridWorld[pos.getX()][pos.getY()];
     }
 
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
     /**
      * Gets the state of the game as a boolean.
      * @return Returns true if the game is over.
@@ -103,8 +128,20 @@ public class World {
         return gameOver;
     }
 
+    public int getStartingBonks() {
+        return startingBonks;
+    }
+
+    public int getStartingZaps() {
+        return startingZaps;
+    }
+
     public int getCycleCount() {
         return cycleCount;
+    }
+
+    public int[] getBonkPopulations() {
+        return bonkPopulations;
     }
 
     /**
@@ -150,6 +187,61 @@ public class World {
             }
         }
     }
+    private void displayGridWorldNicely() {
+        final int boxWidth = 6;
+        final int boxHeight = 3;
+        for (int y = 0; y < height; y ++) {
+            // Lines between rows
+            for (int i = 0; i < width * (boxWidth + 1); i++) {
+                System.out.print('-');
+            }
+            System.out.println();
+            // contents - box size,
+            for (int i = 0; i < boxHeight; i++) { // lines per row
+                for (int x = 0; x < width; x++) {
+                    System.out.print("|");
+                    String text = " ";
+                    if (gridWorld[x][y].getBeings().size() > i) {
+                        if (i == boxHeight - 1) {
+                            text = "+" + (gridWorld[x][y].getBeings().size() - i);
+                        }else {
+                            text = gridWorld[x][y].getBeings().get(i).getName();
+                        }
+                    }
+                    System.out.print(setLengthString(text, boxWidth));
+
+                }
+                System.out.println("|");
+            }
+        }
+        for (int i = 0; i < width * (boxWidth + 1); i++) {
+            System.out.print('-');
+        }
+        System.out.println();
+    }
+
+    /**
+     * Do stuff here.
+     * @param s
+     * @param maxLength
+     * @return
+     */
+    private String setLengthString(String s, int maxLength) {
+        String retString = s;
+        if (s.length() < maxLength) {
+            retString = s;
+            for (int i = 0; i < maxLength - s.length(); i++) {
+                retString += " ";
+            }
+        } else if (s.length() > maxLength) {
+            retString = "";
+            for (int i = 0; i < maxLength - 2; i++) {
+                retString += s.charAt(i);
+            }
+            retString += "..";
+        }
+        return retString;
+    }
 
     /**
      * Initialises rooms.
@@ -164,7 +256,7 @@ public class World {
 
     private void populateRooms() {
         /* Bonks */
-        for (int i = 0; i < GameEngine.startingBonks; i++) {
+        for (int i = 0; i < startingBonks; i++) {
             int x = random.nextInt(width);
             int y = random.nextInt(height);
             Gender g;
@@ -176,11 +268,15 @@ public class World {
             gridWorld[x][y].addBeing(new Bonk(g));
         }
          /* Zaps */
-        for (int i = 0; i < GameEngine.startingZaps; i++) {
+        for (int i = 0; i < startingZaps; i++) {
             int x = random.nextInt(width);
             int y = random.nextInt(height);
             gridWorld[x][y].addBeing(new Zap());
         }
     }
 
+    public static World resetWorld() {
+        instance = new World();
+        return instance;
+    }
 }

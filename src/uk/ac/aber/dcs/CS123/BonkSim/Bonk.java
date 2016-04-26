@@ -52,7 +52,7 @@ public class Bonk
      */
     public Bonk() {
         // Set name to productionCount, then add one to production count.
-        name = "BONK{" + (productionCount++) + "}";
+        name = "B" + (productionCount++);
         birthCycle = World.getInstance().getCycleCount();
         resetLastReproduced();
         alive = true;
@@ -97,7 +97,7 @@ public class Bonk
     /* Overriden Methods */
     @Override
     public String getName() {
-        return null;
+        return name;
     }
 
     @Override
