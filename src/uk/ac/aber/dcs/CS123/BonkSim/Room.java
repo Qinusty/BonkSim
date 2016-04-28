@@ -16,7 +16,7 @@ public class Room {
 
     /**
      * uk.ac.aber.dcs.CS123.BonkSim.Room constructor which takes the position of the room and also calls the default constructor.
-     * @param p
+     * @param p uk.ac.aber.dcs.CS123.BonkSim.Position.
      */
     public Room(Position p) {
         position = p;
@@ -39,7 +39,8 @@ public class Room {
             if (being instanceof Bonk) {
                 Bonk potentialMate = (Bonk) being;
                 // If different genders.
-                if (!potentialMate.getGender().equals(bonk.getGender())) {
+
+                if (!(potentialMate.getGender()==(bonk.getGender()))) {
                     if (potentialMate.ableToBreed()) {
                         return potentialMate;
                     }
@@ -78,12 +79,15 @@ public class Room {
      */
     public int killBonks() {
         int bonksKilled = 0;
+        ArrayList<Being> newBeings = new ArrayList<>(beings);
         for (Being b : beings) {
             if (b instanceof Bonk) {
                 ((Bonk)b).kill();
+                newBeings.remove(b);
                 bonksKilled ++;
             }
         }
+        beings = newBeings;
         return bonksKilled;
     }
 
