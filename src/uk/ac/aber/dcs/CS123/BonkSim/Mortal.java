@@ -8,7 +8,7 @@ public interface Mortal {
      * Every motral on GridWorld will have an age.
      * @return returns the age of the mortal.
      */
-    public int getAge();
+    int getAge();
 
-    public boolean isAlive();
+    boolean isAlive();
 }

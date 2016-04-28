@@ -28,6 +28,9 @@ public class GameEngine {
         scanner = new Scanner(System.in);
     }
 
+    /**
+     * Runs the game loop until
+     */
     public void gameLoop() {
         do {
             world.performCycle();
@@ -48,6 +51,9 @@ public class GameEngine {
         }
     }
 
+    /**
+     * Displays an interactive main menu.
+     */
     public void mainMenu() {
         System.out.print("Enter the number related to your choice:\n" +
                 "1: Run simulation\n" +
@@ -75,78 +81,81 @@ public class GameEngine {
                 // TODO
                 break;
         }
-        if (choice < 3) {
-            endMenu();
-        }
-    }
 
-    private void endMenu() {
-        System.out.print("Enter the number related to your choice:\n" +
-                        "1: See population graph.\n" +
-                        "2: Save population data.\n" +
-                        "3: Return to main menu. \n" +
-                        "4: Exit.\n");
-        int choice = 4;
-        try {
-            choice = scanner.nextInt();
-        } catch (Exception e) {
-            System.out.println("Invalid input for menu scanner.");
-            e.printStackTrace();
-        } finally {
-            scanner.nextLine();
+        Application.launch(GraphForm.class);
+        String filename = savePopulationData();
+        System.out.println("File Saved to: " + filename);
+        while (!scanner.hasNextLine()) {
+            ;
         }
-        switch (choice) {
-            case 1:
-                Application.launch(GraphForm.class);
-                endMenu();
-                break;
-            case 2:
-                savePopulationData();
-                endMenu();
-                break;
-            case 3:
-                mainMenu();
-                break;
-        }
-
-
     }
 
     private void defaultSimulation() {
         // grab instance from singleton.
         world = World.resetWorld();
         cycleMax = 100;
-        world.initialise(cycleMax, 20, 5, 20, 20);
+        // 20 bonks, 5 zaps, 20x20 grid.
+        world.initialise(cycleMax, 20, 5, 30, 11);
         gameLoop();
     }
 
     private void customSimulation() {
-        int maxCycles, sBonks, sZaps, gWidth, gHeight;
-        System.out.println("Enter custom values separated by spaces (Max Cycles, Starting Bonks, Starting Zaps," +
-                            " Grid Width, Grid Height, Cycle Delay in ms)");
-        maxCycles = scanner.nextInt();
-        sBonks = scanner.nextInt();
-        sZaps = scanner.nextInt();
-        gWidth = scanner.nextInt();
-        gHeight = scanner.nextInt();
-        delayTime = scanner.nextInt();
+        int sBonks, sZaps, gWidth, gHeight;
+        Settings.load();
+        System.out.println("Would you like to use previous custom settings? (y/n)\n" +
+                            "Max Cycles: " + Settings.getMaxCycles() + "\n" +
+                            "Starting Bonks: " + Settings.getStartingBonks() + "\n" +
+                            "Starting Zaps: " + Settings.getStartingZaps() + "\n" +
+                            "Grid Width: " + Settings.getGridWidth() + "\n" +
+                            "Grid Height: " + Settings.getGridHeight() + "\n" +
+                            "Delay in ms: " + Settings.getDelayTime() + "\n"
+        );
+        char choice;
+        do {
+            choice = scanner.nextLine().trim().toLowerCase().charAt(0);
+            if (choice == 'y' || choice == 'n') {
+                break;
+            } else {
+                System.out.println("y or n, Don't test me human.");
+            }
+        } while (true);
+        // new settings
+        if (choice == 'n') {
+            System.out.println("Enter custom values separated by spaces (Max Cycles, Starting Bonks, Starting Zaps," +
+                    " Grid Width, Grid Height, Cycle Delay in ms)");
+            cycleMax = scanner.nextInt();
+            sBonks = scanner.nextInt();
+            sZaps = scanner.nextInt();
+            gWidth = scanner.nextInt();
+            gHeight = scanner.nextInt();
+            delayTime = scanner.nextInt();
 
-        scanner.nextLine();
-        world = world.resetWorld();
-        cycleMax = maxCycles;
+            Settings.modifyAllSettings(cycleMax, sBonks, sZaps, gWidth, gHeight, delayTime);
+            Settings.save();
+
+            scanner.nextLine();
+        } else { // load previous settings
+
+            cycleMax = Settings.getMaxCycles();
+            sBonks = Settings.getStartingBonks();
+            sZaps = Settings.getStartingZaps();
+            gWidth = Settings.getGridWidth();
+            gHeight = Settings.getGridHeight();
+            delayTime = Settings.getDelayTime();
+        }
+        world = World.resetWorld();
         world.initialise(cycleMax, sBonks, sZaps, gWidth, gHeight);
         gameLoop();
     }
 
     private String savePopulationData() {
-
-        int[] data = world.getBonkPopulations();
+        long[] data = world.getBonkPopulations();
         String filePath = "data/" + getDateTimeString() + ".dat";
         Path file = Paths.get(filePath);
         ArrayList<String> lines = new ArrayList<>();
         lines.add(world.getWidth() + "x" + world.getHeight());
         lines.add(world.getStartingBonks() + ":" + world.getStartingZaps());
-        for (int i : data) {
+        for (long i : data) {
             lines.add("" + i);
         }
         try {

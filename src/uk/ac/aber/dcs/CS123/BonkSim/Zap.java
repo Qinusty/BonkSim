@@ -14,11 +14,9 @@ public class Zap
 
     /* Instance Variables */
     private String name;
-    private int killCount;
 
     public Zap() {
         name = "Z" + (productionCount++);
-        killCount = 0;
     }
 
     @Override
@@ -29,7 +27,7 @@ public class Zap
     @Override
     public void act() throws CannotActException {
         /* Kill All in room */
-        killCount += room.killBonks();
+        room.killBonks();
         /* Move */
         move();
     }
@@ -39,13 +37,9 @@ public class Zap
         super.move();
     }
 
-    public int getKillCount() {
-        return killCount;
-    }
-
     @Override
     public String toString() {
-        return getLocation().toString() + " : " + name + " : Kills=" + killCount;
+        return getLocation().toString() + " : " + name;
     }
 
     @Override

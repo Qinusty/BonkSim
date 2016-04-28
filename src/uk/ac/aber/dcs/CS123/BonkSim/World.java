@@ -11,26 +11,36 @@ public class World {
     /* Singleton */
     private static World instance = null;
     public static World getInstance() {
-        if (instance == null) {
-            instance = new World();
-        }
-        return instance;
+        return instance == null? instance = new World(): instance;
     }
     /* Instance Variables */
     private Room[][] gridWorld;
     private boolean gameOver;
     private Random random;
     private int cycleCount;
-    private int[] bonkPopulations;
+    private long[] bonkPopulations;
     private int startingBonks;
     private int startingZaps;
     private int width;
     private int height;
 
-    /* Public Methods*/
-    public World() {
+    /**
+     * Private constructor to prevent instantiation from within other classes.
+     */
+    private World() {
     }
 
+    /* Public Methods*/
+
+
+    /**
+     * Needs to be run before the performCycle as this initialises key variables.
+     * @param maxCycles Maximum number of cycles to be used.
+     * @param startBonks Starting bonks to use.
+     * @param startZaps Starting zaps to use.
+     * @param width Grid Width to use.
+     * @param height Grid Height to use.
+     */
     public void initialise(int maxCycles, int startBonks, int startZaps, int width, int height) {
         startingBonks = startBonks;
         startingZaps = startZaps;
@@ -42,17 +52,17 @@ public class World {
         random = new Random();
         cycleCount = 0;
         populateRooms();
-        bonkPopulations = new int[maxCycles];
+        bonkPopulations = new long[maxCycles];
 
     }
 
     /**
-     * Performs the basic cycle of the world.
+     * Performs the basic cycle of the world. ALWAYS RUN initialise FIRST
      */
     public void performCycle() {
         // gameOver is always true unless a living bonk is found.
         gameOver = true;
-        int bonkCount = getBonkCount();
+        long bonkCount = getBonkCount();
         bonkPopulations[cycleCount] = bonkCount;
         System.out.println("Cycle: " + cycleCount + " - BonkCount: " + bonkCount);
         for (Room[] col : gridWorld) {
@@ -82,14 +92,21 @@ public class World {
         cycleCount ++;
     }
 
+    /**
+     * Runs the code necessary at the end of a game.
+     */
     public void endGame() {
         if (gameOver) {
             bonkPopulations[cycleCount] = getBonkCount();
         }
     }
 
-    public int getBonkCount() {
-        int bonkCounter = 0;
+    /**
+     * Gets the amount of bonks within the world
+     * @return A long value storing the amount of bonks within the world at the current time.
+     */
+    public long getBonkCount() {
+        long bonkCounter = 0;
         for (Room[] col : gridWorld) {
             for (Room r : col) {
                 for (Being b : r.getBeings()) {
@@ -140,7 +157,11 @@ public class World {
         return cycleCount;
     }
 
-    public int[] getBonkPopulations() {
+    /**
+     * Gets an array of longs which represent the bonk populations per cycle in the simulation.
+     * @return
+     */
+    public long[] getBonkPopulations() {
         return bonkPopulations;
     }
 
@@ -197,15 +218,30 @@ public class World {
             }
             System.out.println();
             // contents - box size,
+            int printedBeings[] = new int[width];
             for (int i = 0; i < boxHeight; i++) { // lines per row
                 for (int x = 0; x < width; x++) {
                     System.out.print("|");
                     String text = " ";
+                    boolean printBeing = false;
                     if (gridWorld[x][y].getBeings().size() > i) {
-                        if (i == boxHeight - 1) {
-                            text = "+" + (gridWorld[x][y].getBeings().size() - i);
-                        }else {
-                            text = gridWorld[x][y].getBeings().get(i).getName();
+                        // if bonk check if alive
+                        if (gridWorld[x][y].getBeings().get(i) instanceof Bonk) {
+                            Bonk b = (Bonk)gridWorld[x][y].getBeings().get(i);
+                            if (b.isAlive()) {
+                                printBeing = true;
+                            }
+                        } else {
+                            printBeing = true;
+                        }
+                        // if eligible to print (Alive bonk or Zap)
+                        if (printBeing) {
+                            if (printedBeings[x] == boxHeight - 1) {
+                                text = "+" + (gridWorld[x][y].getBeings().size() - i);
+                            } else {
+                                text = gridWorld[x][y].getBeings().get(i).getName();
+                            }
+                            printedBeings[x] ++;
                         }
                     }
                     System.out.print(setLengthString(text, boxWidth));
@@ -222,9 +258,9 @@ public class World {
 
     /**
      * Do stuff here.
-     * @param s
-     * @param maxLength
-     * @return
+     * @param s The string to check against.
+     * @param maxLength Maximum length of the string to return.
+     * @return Returns the string altered to the length specified.
      */
     private String setLengthString(String s, int maxLength) {
         String retString = s;

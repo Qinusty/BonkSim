@@ -24,8 +24,6 @@ public class Bonk
     private int lastReproduced;
     private int lastActed;
     private boolean alive;
-    private LinkedList<Bonk> parents;
-    private LinkedList<Bonk> children;
 
     /* Public Methods */
 
@@ -41,10 +39,6 @@ public class Bonk
 
     public Bonk(Gender gender, Bonk[] parents) {
         this(gender);
-        for (Bonk p : parents) {
-            this.parents.add(p);
-            p.addChild(this);
-        }
     }
 
     /**
@@ -56,8 +50,6 @@ public class Bonk
         birthCycle = World.getInstance().getCycleCount();
         resetLastReproduced();
         alive = true;
-        parents = new LinkedList<>();
-        children = new LinkedList<>();
     }
 
     /**
@@ -142,10 +134,7 @@ public class Bonk
         if (isAlive()) {
             if (getAge() > 0) {
                 if (cyclesSinceLastReproduced() != 0) {
-                    // Restrict children to 2
-                    if (children.size() < 2) {
-                        return true;
-                    }
+                    return true;
                 }
             }
         }
@@ -162,7 +151,6 @@ public class Bonk
         if (productionCount != bonk.productionCount) return false;
         if (getAge() != bonk.getAge()) return false;
         if (lastReproduced != bonk.lastReproduced) return false;
-        if (random != null ? !random.equals(bonk.random) : bonk.random != null) return false;
         if (name != null ? !name.equals(bonk.name) : bonk.name != null) return false;
         if (gender != bonk.gender) return false;
         return room != null ? room.equals(bonk.room) : bonk.room == null;
@@ -172,7 +160,6 @@ public class Bonk
     @Override
     public int hashCode() {
         int result = productionCount;
-        result = 31 * result + (random != null ? random.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (gender != null ? gender.hashCode() : 0);
         result = 31 * result + getAge();
@@ -191,10 +178,6 @@ public class Bonk
             ret += "DEAD";
 
         return ret;
-    }
-
-    public void addChild(Bonk b) {
-        children.add(b);
     }
 
     /* Private Methods*/
