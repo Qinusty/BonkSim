@@ -1,26 +1,115 @@
 \documentclass[12pt]{article}
 %Gummi|065|=)
-\title{\textbf{Welcome to Gummi 0.6.6}}te
-\author{Alexander van der Meij\\
-		Wei-Ning Huang\\
-		Dion Timmermann}
+
+\usepackage{fancyhdr}
+\usepackage{listings}
+
+\pagestyle{fancy}
+\title{\textbf{CS12320 - Main Assignment\\
+				Bonks and Zaps}}
+\author{Josh Smith\\
+		jos67@aber.ac.uk}
+\lfoot{Document compiled on \today}
 \date{}
 \begin{document}
 
+
 \maketitle
+\newpage
 
-\section{Before you start}
+\tableofcontents
 
-You are now using Gummi 0.6.6. Many new exciting features have been added to the 0.6 series. The document editor is now a tabbed instance, allowing multiple documents to be worked on simultaneously. Using the new projects menu, you can group files together for easy access. 
+\newpage
 
-Support for two high-level {\LaTeX} building systems, \emph{rubber}\footnote{https://launchpad.net/rubber/} \& \emph{latexmk}\footnote{http://www.phys.psu.edu/{\textasciitilde}collins/software/latexmk-jcc/} has been added as well. Your preferred typesetter can be configured through the Compilation tab in the Preferences menu. Typesetters that are not installed on your system will not be selectable. 
 
-Added for your viewing convenience is a continuous preview mode for the PDF. This mode is enabled by default, but can also be disabled through the \emph{(View $\rightarrow$ Page layout in preview)} menu. Complementary to this feature is SyncTeX integration, which allows you to synchronize the position in your editor with the PDF preview. 
+\section{Introduction}
+For this write-up I will be walking through some of the choices I made throughout my assignment. I will mainly focus on the decisions related to the structure of my classes; some of these main decisions will be choice of classes and uses of inheritance throughout the project.
 
-\section{Feedback}
-We hope you will enjoy using this release as much as we enjoyed creating it. If you have comments, suggestions or wish to report an issue you are experiencing - contact us at: \emph{https://github.com/alexandervdm/gummi}.
+\section{Design}
+This section will contain the portions of my write-up regarding the design of my assignment.
 
-\section{One more thing}
-If you are wondering where your old default text is; it has been stored as a template. The template menu can be used to access and restore it. 
+\subsection{Class Diagam}
+
+\subsection{Class Descriptions}
+This section is going to consist of a textual breakdown of each class and its primary functions.
+
+\subsubsection{GameEngine}
+The main purpose of this class is to perform the primary operations of the 'game', these operations include:
+\begin{itemize}
+	\item Running the main game loop.
+	\item Displaying the menu.
+	\item Managing general data about the game.
+\end{itemize}
+The game engine also manages the initialisation of the world to be used for the 'game'. I decided to keep the GameEngine class as bare bones as possible to allow for possible alternate worlds to be added with ease. \\
+
+\begin{lstlisting}[caption=Game loop]
+do
+	world.performCycle
+	delay
+until gameOver OR (cycleCount == maxCycles)
+\end{lstlisting}
+
+This means that most of the decisions are made by the world object and any logic within the performCycle() function.
+
+\subsubsection{World}
+This class is used as the main component for the 'game' as it performs the main operations such as displaying the grid and iterating through the grid to tell every being within a room to perform its act() method. \\
+
+I decided to implement the class with a singleton. This means that a world object cannot be instantiated from outside the class and is stored within a static variable. This allows me to have a single instance of World used throughout the 'game' which can be easily accessed by other classes through the World.getInstance() function. I chose  to implement it this way as I only intended for a single world to be in use at one time.\\
+
+The class also manages the grid which is implemented as a two-dimensional array of Room's (See 2.2.3 for info on the Room class). In the brief the grid system was defined to have set movements beings can take from one room to another, to implement this I created a function within my world class called calculateConnectingRooms() which is used by the Room class inside of the constructor to tell each room which rooms it is 'connected' to.
+
+\begin{lstlisting}[language=Java, basicstyle=\small, caption=performCycle function]
+    public void performCycle() {
+        // gameOver is always true unless a living bonk is found.
+        gameOver = true;
+        long bonkCount = getBonkCount();
+        bonkPopulations[cycleCount] = bonkCount;
+        System.out.println("Cycle: " + cycleCount + " - BonkCount: " + bonkCount);
+        for (Room[] col : gridWorld) {
+            for (Room r : col) {
+                // Creates a copy of the list for us to iterate through despite
+                // modifications during b.act()
+                ArrayList<Being> beings = new ArrayList<>(r.getBeings());
+                for (Being b : beings) {
+                    if (b instanceof Bonk) {
+                        if (((Bonk) b).isAlive()) {
+                            gameOver = false;
+                        }
+                    }
+                    try {
+                        b.act();
+                    } catch (CannotActException e) {
+                        System.err.println("ERROR: Cannnot act.");
+                    }
+                }
+            }
+        }
+\end{lstlisting}
+
+This function takes care of everything that needs to be done for a singular game cycle within the world. \\
+
+I chose to draw the world at the end of a cycle rather than the start of a cycle so that it shows the state of the grid world after any changes have been made. The grid is drawn through a seperate function named displayGridWorldNicely() as this is the successor to the initial function I had during the start of my project when I wanted to quickly see if things were changing without having to write out an aestheticially pleasing terminal UI. I opted against a JavaFX based UI for the grid world as this would have taken me a lot longer and I was happy with my terminal output.\\
+
+Throughout each cycle I am collecting data within the bonkPopulations variable which is of type long[] as this allows me to graphically display the changes in bonk populations for each cycle (More in section 2.2.9).
+
+\subsubsection{Room}
+This class plays a very key role within the 'game' as it acts as a container for the Beings at its 'location' within the array. The location is relative to the index of the room within the two-dimensional array of Room's within stored World.\\
+
+The class also keeps a list of rooms which it is 'connected' to as mentioned earlier in the section 2.2.2. These connecting rooms are used when a being is performing its move logic (See section 2.2.4).\\
+
+The constructor for Room takes a Position (See 2.2.5) as this allows it to know its place in the world and request information from the World such as which rooms are connected to it.
+
+
+\subsubsection{MovableBeing}
+\subsubsection{Position}
+\subsubsection{Bonk}
+\subsubsection{Zap}
+\subsubsection{Room}
+
+\section{Testing}
+Testing
+\section{Evaluation}
+Evaluation
+ 
 
 \end{document}

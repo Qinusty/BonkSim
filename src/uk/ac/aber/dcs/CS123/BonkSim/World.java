@@ -10,8 +10,23 @@ public class World {
 
     /* Singleton */
     private static World instance = null;
+
+    /**
+     * The primary function for use with the singleton. This either creates a new instance of World for the singleton
+     * if the current instance is null and returns it or returns the current instance.
+     * @return Returns the singleton instance.
+     */
     public static World getInstance() {
         return instance == null? instance = new World(): instance;
+    }
+
+    /**
+     * Reinitialises the instance of World.
+     * @return Returns the newly reinitialised instance object.
+     */
+    public static World resetWorld() {
+        instance = new World();
+        return instance;
     }
     /* Instance Variables */
     private Room[][] gridWorld;
@@ -53,7 +68,6 @@ public class World {
         cycleCount = 0;
         populateRooms();
         bonkPopulations = new long[maxCycles];
-
     }
 
     /**
@@ -102,7 +116,7 @@ public class World {
     }
 
     /**
-     * Gets the amount of bonks within the world.
+     * Gets the amount of bonks within the world
      * @return A long value storing the amount of bonks within the world at the current time.
      */
     public long getBonkCount() {
@@ -307,8 +321,4 @@ public class World {
         }
     }
 
-    public static World resetWorld() {
-        instance = new World();
-        return instance;
-    }
 }

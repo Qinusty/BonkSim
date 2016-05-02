@@ -29,6 +29,15 @@ public class Room {
     }
 
     /**
+     * Adds a being to the uk.ac.aber.dcs.CS123.BonkSim.Room.
+     * @param b uk.ac.aber.dcs.CS123.BonkSim.Being to add.
+     */
+    public void addBeing(Being b) {
+        beings.add(b);
+        b.setLocation(position);
+    }
+    
+    /**
      * Finds a mate which is compatible with the bonk passed as a parameter and meets the eligibility defined
      * in uk.ac.aber.dcs.CS123.BonkSim.Bonk.ableToBreed()
      * @param bonk The uk.ac.aber.dcs.CS123.BonkSim.Bonk which needs a mate found.
@@ -49,14 +58,7 @@ public class Room {
         }
         return null;
     }
-    /**
-     * Adds a being to the uk.ac.aber.dcs.CS123.BonkSim.Room.
-     * @param b uk.ac.aber.dcs.CS123.BonkSim.Being to add.
-     */
-    public void addBeing(Being b) {
-        beings.add(b);
-        b.setLocation(position);
-    }
+
     /**
      * Removes a being from the uk.ac.aber.dcs.CS123.BonkSim.Room.
      * @param b uk.ac.aber.dcs.CS123.BonkSim.Being to add.

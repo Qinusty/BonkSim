@@ -54,7 +54,7 @@ public class GameEngine {
     /**
      * Displays an interactive main menu.
      */
-    public void mainMenu() {
+    private void mainMenu() {
         System.out.print("Enter the number related to your choice:\n" +
                 "1: Run simulation\n" +
                 "2: Run custom simulation\n" +
