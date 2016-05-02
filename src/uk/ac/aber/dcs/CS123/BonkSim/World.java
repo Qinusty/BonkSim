@@ -102,21 +102,17 @@ public class World {
     }
 
     /**
-     * Gets the amount of bonks within the world
+     * Gets the amount of bonks within the world.
      * @return A long value storing the amount of bonks within the world at the current time.
      */
     public long getBonkCount() {
-        long bonkCounter = 0;
+        long beingCounter = 0;
         for (Room[] col : gridWorld) {
             for (Room r : col) {
-                for (Being b : r.getBeings()) {
-                    if (b instanceof Bonk && ((Bonk) b).isAlive()) {
-                        bonkCounter ++;
-                    }
-                }
+                beingCounter += r.getBeings().size();
             }
         }
-        return bonkCounter;
+        return beingCounter - startingZaps;
     }
 
 

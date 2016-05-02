@@ -112,12 +112,18 @@ public class GameEngine {
         );
         char choice;
         do {
-            choice = scanner.nextLine().trim().toLowerCase().charAt(0);
-            if (choice == 'y' || choice == 'n') {
-                break;
-            } else {
-                System.out.println("y or n, Don't test me human.");
-            }
+            String input;
+
+            input = scanner.nextLine();
+            if (input != null && input != "") {
+                choice = input.trim().toLowerCase().charAt(0);
+                if (choice == 'y' || choice == 'n') {
+                    break;
+                } else {
+                    System.out.println("y or n, Don't test me human.");
+                }
+            } else { System.out.println("y or n, Don't test me human."); }
+
         } while (true);
         // new settings
         if (choice == 'n') {

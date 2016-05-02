@@ -11,11 +11,7 @@ public class Bonk
         implements Mortal {
 
     /* Static Variables */
-    private static int productionCount;
-
-    public static int getProductionCount() {
-        return productionCount;
-    }
+    private static long productionCount;
 
     /* Instance Variables */
     private String name;
@@ -35,10 +31,6 @@ public class Bonk
     public Bonk(Gender gender) {
         this();
         this.gender = gender;
-    }
-
-    public Bonk(Gender gender, Bonk[] parents) {
-        this(gender);
     }
 
     /**
@@ -129,6 +121,10 @@ public class Bonk
         this.alive = false;
     }
 
+    /**
+     * Checks whether the Bonk meets the criteria for mating.
+     * @return Returns true if the bonk is alive, is older than 1 cycle and hasn't reproduced this cycle.
+     */
     public boolean ableToBreed() {
         // eligibility criteria
         if (isAlive()) {
@@ -158,17 +154,6 @@ public class Bonk
     }
 
     @Override
-    public int hashCode() {
-        int result = productionCount;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (gender != null ? gender.hashCode() : 0);
-        result = 31 * result + getAge();
-        result = 31 * result + lastReproduced;
-        result = 31 * result + (room != null ? room.hashCode() : 0);
-        return result;
-    }
-
-    @Override
     public String toString() {
         String ret = getLocation().toString() + " : " +
                 name + " : " + gender.toString() + " : ";
@@ -192,13 +177,10 @@ public class Bonk
             else
                 g = Gender.Female;
             // adds a new bonk with the current bonk and the passed bonk b as parents with gender g.
-            Bonk child = new Bonk(g, new Bonk[]{this, b});
+            Bonk child = new Bonk(g);
             room.addBeing(child);
 
             //System.out.println("Successful breeding complete!");
-        }
-        else {
-            return; // No possible mates found
         }
     }
 

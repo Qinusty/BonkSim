@@ -8,9 +8,9 @@ public class Zap
         extends MovableBeing {
 
     /* Static Variables */
-    private static int productionCount;
+    private static long productionCount;
 
-    public static int getProductionCount() { return productionCount; }
+    public static long getProductionCount() { return productionCount; }
 
     /* Instance Variables */
     private String name;
@@ -50,6 +50,17 @@ public class Zap
     @Override
     public Position getLocation() {
         return super.getLocation();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Zap zap = (Zap) o;
+
+        return name != null ? name.equals(zap.name) : zap.name == null;
+
     }
 }
 

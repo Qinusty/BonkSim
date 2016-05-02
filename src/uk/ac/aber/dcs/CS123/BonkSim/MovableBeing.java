@@ -24,6 +24,8 @@ public abstract class MovableBeing implements Being {
         }
     }
 
+
+
     @Override
     public Position getLocation() {
         return room.getPosition();

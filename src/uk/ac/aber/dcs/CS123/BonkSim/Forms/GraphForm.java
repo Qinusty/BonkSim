@@ -1,6 +1,5 @@
 package uk.ac.aber.dcs.CS123.BonkSim.Forms;
 
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
@@ -8,7 +7,6 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import uk.ac.aber.dcs.CS123.BonkSim.World;
 
 /**
@@ -43,8 +41,10 @@ public class GraphForm extends javafx.application.Application {
         XYChart.Series<Number, Number> series = new XYChart.Series<>();
         series.setName("Bonk Population");
         for (int i = 0; i < maxX; i++) {
+            // remove the data points to create smooth graph.
             Rectangle rect = new Rectangle(0, 0);
             rect.setVisible(false);
+
             XYChart.Data<Number, Number> point = new XYChart.Data(i, data[i]);
             point.setNode(rect);
             series.getData().add(point);
