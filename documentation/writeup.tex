@@ -3,7 +3,9 @@
 
 \usepackage{fancyhdr}
 \usepackage{listings}
+\usepackage{graphicx}
 
+\graphicspath{ {testing/}{design/} }
 \pagestyle{fancy}
 \title{\textbf{CS12320 - Main Assignment\\
 				Bonks and Zaps}}
@@ -11,6 +13,7 @@
 		jos67@aber.ac.uk}
 \lfoot{Document compiled on \today}
 \date{}
+\usepackage{amsmath}
 \begin{document}
 
 
@@ -100,22 +103,64 @@ The class also keeps a list of rooms which it is 'connected' to as mentioned ear
 The room stores the beings in a single list rather than seperating them by type as this helps maintain balance with the bonks/zaps acting in an order defined by their position in the list; this is a first in first out approach. The room class will also have a major job in the bonk reproduction process as it will be used to find potential mates for the bonks every cycle. The function findMate() shall be called from within the Bonk class and will check the list of beings for any bonks which are of the opposite gender and are eligible to breed this cycle. Eligibility to breed is defined in the brief as a bonk which is more than one cycle old and has not been involved in any other reproduction this cycle. To prevent this I am storing the current cycle in a variable called lastReproduced whenever the bonk reproduces and then comparing it with the current cycle to check its eligibility.  
 
 \subsubsection{MovableBeing}
-This class is an abstract class as it should never be used on its own. This class is mainly used to prevent code duplication and make use of inheritance. Both bonks and zaps are types of MovableBeings and therefore both inherit from the class. The main function this class contains is the move() functions which has the logic for random movement based on connecting rooms. I am using a static random variable rather than instantiating a new random each time the move() function is called as the java Random class uses time in milliseconds as a seed which could call issues if two Randoms are instantiated within a single millisecond which would not be unreasonable. 
+This class is an abstract class as it should never be used on its own. This class is mainly used to prevent code duplication and make use of inheritance. Both bonks and zaps are types of MovableBeings and therefore both inherit from the class. The main function this class contains is the move() functions which has the logic for random movement based on connecting rooms. I am using a static random variable rather than instantiating a new random each time the move() function is called as the java Random class uses time in milliseconds as a seed which could call issues if two Randoms are instantiated within a single millisecond which would not be unreasonable. \\
 
-This class also implements the Being interface we were given in the brief and implements the methods getLocation() and setLocation() in a slightly roundabout way. Because of my approach to the problem (using a two dimensional array of rooms) I chose to have the setLocation() function simply ask the world for the room at the location passed based on an index of Position.getX() and Position.getY().
+This class also implements the Being interface we were given in the brief and implements the methods getLocation() and setLocation() in a slightly roundabout way. Because of my approach to the problem (using a two dimensional array of rooms) I chose to have the setLocation() function simply ask the world for the room at the location passed based on an index of Position.getX() and Position.getY().\\
+
+For my act() function I am ensuring that before anything is done that the being meets certain criteria. It is vital that the being is aware of the last cycle that it acted as if the being moves to another room before that room has had its cycle then the being will act again. To prevent this I am checking that the lastActed variable is not the same as the current cycle. I am also checking that the being is alive before allowing it to act. 
 \subsubsection{Position}
 This is a very simple class implemented to work with the interface provided. It has an X and a Y value with functions to get the values.
 \subsubsection{Bonk}
-This is the first of the two Beings in use in the current state of the 'game'. Bonks inherit from MovableBeing and also implement Mortal (See 2.2.8). Due to the specification bonks are implemented with a set Gender (see 2.2.9), this only makes a difference during reproduction. For my naming convention I chose a simple format of the letter B followed by the number which uniquely identifies the Bonk (The number of bonks produced so far this 'game'). I have a function implemented called ableToBreed() which returns true if the bonk meets all the criteria needed to reproduce this cycle; this helps reduce code duplication and ensures that I only have to change this one function if any changes are made to the criteria.
+This is the first of the two Beings in use in the current state of the 'game'. Bonks inherit from MovableBeing and also implement the Mortal interface (See 2.2.8). Due to the specification bonks are implemented with a set Gender (see 2.2.9), this only makes a difference during reproduction. For my naming convention I chose a simple format of the letter B followed by the number which uniquely identifies the Bonk (The number of bonks produced so far this 'game' at the time of instantiation). I have a function implemented called ableToBreed() which returns true if the bonk meets all the criteria needed to reproduce this cycle; this helps reduce code duplication and ensures that I only have to change this one function if any changes are made to the criteria.
 
-For my act() function I am ensuring that before anything is done that the bonk meets certain criteria. It is vital that the bonk is aware of the last cycle that it acted as if the bonk moves to another room before that room has had its cycle then the bonk will act again. To prevent this I am checking that the lastActed variable is not the same as the current cycle. I am also checking that the bonk is alive before allowing it to act. 
 \subsubsection{Zap}
+This is the second of the two beings currently in use. Zaps also inherit from MoveableBeing however do not implement the Mortal interface as they cannot die. Zaps are a very simple being as they do not have the reproduction mechanic. As specified by the brief the only task for the zap is to kill all of the bonks within its room every time it is called upon to act which is once per cycle. The zap also has its own static productionCount variable for uniquely identifying the zaps; they follow a similar naming convention to bonks however I use a Z followed by the productionCount at the time of instantiation.
 \subsubsection{Mortal}
+This interface is simple and could possibly be considered unnecessary but since the brief mentioned that there is a likelyhood that more mortal beings will be added in the future, this allows for less code duplication throughout these other mortal beings.\\
 
+This interface ensures that the classes which implement it have a getAge() function, an isAlive() function and a kill() function. These are the three key components to being a mortal.
 \section{Testing}
-Testing
+Disclaimer: All testing was done on a Linux system running Fedora 23 using Oracles Java version 8.
+
+\subsection{Test 1}
+This test ensures that the 'game' ends after the specified number of cycles.
+
+\includegraphics[width=15cm]{test1a}
+As you can see the settings are entered to set the game to run for 10 cycles.\\
+\includegraphics[width=15cm]{test1b}
+The bonks survive the turns after cycle 9 (cycle 0 is the first cycle therefore cycle 9 is the 10th cycle.) The game performs as expected and the graph is shown at the end successfully.
+
+\subsection{Test 2}
+This test was done straight after the first test and was done with the purpose of checking that the settings had saved and then loaded successfully.
+\includegraphics[width=15cm]{test2}
+As you can see the settings are identical to those I entered in the first test. This is the result I expected as I am using java properties to save and load these settings.
+
+\subsection{Test 3}
+This test was done to show that the game ends when all bonks are killed. To ensure this happened I set an equal number of zaps to bonks to start with.\\
+\includegraphics[width=15cm]{test3a}
+I ran the 'game' with these settings.\\
+\includegraphics[width=15cm]{test3b}
+As the image above shows, the 'game' successfully ends when all bonks are killed and in this example it took 72 game cycles. You can see the progression of the bonks dying on the graph on the right.\\ 
+One issue I have noticed here is that the graph shows the bonk populations up until n-1 cycles in the case that all bonks are killed and therefore the graph never declines to 0. This could be an issue with my endGame() function.
+
+\subsection{Test 4}
+This is a simple test to ensure that the program closes when you enter 3 on the main menu.\\
+\includegraphics[width=15cm]{test4}
+
+\subsection{Test 5}
+This is a test aimed at the random positioning of beings at the start of a 'game'. Below are two images of two seperate times running the game on the first cycle.\\
+\includegraphics[height=7cm]{test5a}
+\includegraphics[height=7cm]{test5b}
+ The two grids have completely different positionings of beings throughout the grid. This is what was expected due to the random nature of the 'game'.
+
+\subsection{Test 6}
+This test was supposed to check that the game can handle extremes. To test this I set the starting bonks to 3 million which is larger than the size of an integer. I used a long for my productionCount value within the bonk class so I did not expect this to be an issue.\\
+\includegraphics[width=15cm]{test6}
+As you can see, the 'game' handles this fine and fills the world with bonks, despite the image not being able to show the entire grid world it shows enough to prove that the 'game' operates to expected levels.
 \section{Evaluation}
-Evaluation
+This is for tomorrow.
+
+
  
 
 \end{document}
