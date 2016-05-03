@@ -42,7 +42,7 @@ The main purpose of this class is to perform the primary operations of the 'game
 \end{itemize}
 The game engine also manages the initialisation of the world to be used for the 'game'. I decided to keep the GameEngine class as bare bones as possible to allow for possible alternate worlds to be added with ease. \\
 
-\begin{lstlisting}[caption=Game loop]
+\begin{lstlisting}[caption=Game loop, basicstyle=\small]
 do
 	world.performCycle
 	delay
@@ -58,7 +58,7 @@ I decided to implement the class with a singleton. This means that a world objec
 
 The class also manages the grid which is implemented as a two-dimensional array of Room's (See 2.2.3 for info on the Room class). In the brief the grid system was defined to have set movements beings can take from one room to another, to implement this I created a function within my world class called calculateConnectingRooms() which is used by the Room class inside of the constructor to tell each room which rooms it is 'connected' to.
 
-\begin{lstlisting}[language=Java, basicstyle=\small, caption=performCycle function]
+\begin{lstlisting}[language=Java, basicstyle=\tiny, caption=performCycle function]
     public void performCycle() {
         // gameOver is always true unless a living bonk is found.
         gameOver = true;
@@ -95,16 +95,22 @@ Throughout each cycle I am collecting data within the bonkPopulations variable w
 \subsubsection{Room}
 This class plays a very key role within the 'game' as it acts as a container for the Beings at its 'location' within the array. The location is relative to the index of the room within the two-dimensional array of Room's within stored World.\\
 
-The class also keeps a list of rooms which it is 'connected' to as mentioned earlier in the section 2.2.2. These connecting rooms are used when a being is performing its move logic (See section 2.2.4).\\
+The class also keeps a list of rooms which it is 'connected' to as mentioned earlier in the section 2.2.2. These connecting rooms are used when a being is performing its move logic (See section 2.2.4). The constructor for Room takes a Position (See 2.2.5) as this allows it to know its place in the world and request information from the World such as which rooms are connected to it.\\
 
-The constructor for Room takes a Position (See 2.2.5) as this allows it to know its place in the world and request information from the World such as which rooms are connected to it.
-
+The room stores the beings in a single list rather than seperating them by type as this helps maintain balance with the bonks/zaps acting in an order defined by their position in the list; this is a first in first out approach. The room class will also have a major job in the bonk reproduction process as it will be used to find potential mates for the bonks every cycle. The function findMate() shall be called from within the Bonk class and will check the list of beings for any bonks which are of the opposite gender and are eligible to breed this cycle. Eligibility to breed is defined in the brief as a bonk which is more than one cycle old and has not been involved in any other reproduction this cycle. To prevent this I am storing the current cycle in a variable called lastReproduced whenever the bonk reproduces and then comparing it with the current cycle to check its eligibility.  
 
 \subsubsection{MovableBeing}
+This class is an abstract class as it should never be used on its own. This class is mainly used to prevent code duplication and make use of inheritance. Both bonks and zaps are types of MovableBeings and therefore both inherit from the class. The main function this class contains is the move() functions which has the logic for random movement based on connecting rooms. I am using a static random variable rather than instantiating a new random each time the move() function is called as the java Random class uses time in milliseconds as a seed which could call issues if two Randoms are instantiated within a single millisecond which would not be unreasonable. 
+
+This class also implements the Being interface we were given in the brief and implements the methods getLocation() and setLocation() in a slightly roundabout way. Because of my approach to the problem (using a two dimensional array of rooms) I chose to have the setLocation() function simply ask the world for the room at the location passed based on an index of Position.getX() and Position.getY().
 \subsubsection{Position}
+This is a very simple class implemented to work with the interface provided. It has an X and a Y value with functions to get the values.
 \subsubsection{Bonk}
+This is the first of the two Beings in use in the current state of the 'game'. Bonks inherit from MovableBeing and also implement Mortal (See 2.2.8). Due to the specification bonks are implemented with a set Gender (see 2.2.9), this only makes a difference during reproduction. For my naming convention I chose a simple format of the letter B followed by the number which uniquely identifies the Bonk (The number of bonks produced so far this 'game'). I have a function implemented called ableToBreed() which returns true if the bonk meets all the criteria needed to reproduce this cycle; this helps reduce code duplication and ensures that I only have to change this one function if any changes are made to the criteria.
+
+For my act() function I am ensuring that before anything is done that the bonk meets certain criteria. It is vital that the bonk is aware of the last cycle that it acted as if the bonk moves to another room before that room has had its cycle then the bonk will act again. To prevent this I am checking that the lastActed variable is not the same as the current cycle. I am also checking that the bonk is alive before allowing it to act. 
 \subsubsection{Zap}
-\subsubsection{Room}
+\subsubsection{Mortal}
 
 \section{Testing}
 Testing

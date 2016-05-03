@@ -56,11 +56,10 @@ public class GameEngine {
      */
     private void mainMenu() {
         System.out.print("Enter the number related to your choice:\n" +
-                "1: Run simulation\n" +
+                "1: Run default simulation\n" +
                 "2: Run custom simulation\n" +
-                "3: Visualize previous data.\n" +
-                "4: Exit.\n");
-        int choice = 4;
+                "3: Exit.\n");
+        int choice = 3;
         try {
             choice = scanner.nextInt();
         } catch (Exception e) {
@@ -69,7 +68,7 @@ public class GameEngine {
         } finally {
             scanner.nextLine();
         }
-
+        // Perform action based on choice.
         switch (choice) {
             case 1:
                 defaultSimulation();
@@ -77,16 +76,14 @@ public class GameEngine {
             case 2:
                 customSimulation();
                 break;
-            case 3:
-                // TODO
-                break;
         }
-
-        Application.launch(GraphForm.class);
-        String filename = savePopulationData();
-        System.out.println("File Saved to: " + filename);
-        while (!scanner.hasNextLine()) {
-            ;
+        if (choice == 1 || choice == 2) {
+            Application.launch(GraphForm.class);
+            String filename = savePopulationData();
+            System.out.println("File Saved to: " + filename);
+            while (!scanner.hasNextLine()) {
+                ;
+            }
         }
     }
 
@@ -108,8 +105,8 @@ public class GameEngine {
                             "Starting Zaps: " + Settings.getStartingZaps() + "\n" +
                             "Grid Width: " + Settings.getGridWidth() + "\n" +
                             "Grid Height: " + Settings.getGridHeight() + "\n" +
-                            "Delay in ms: " + Settings.getDelayTime() + "\n"
-        );
+                            "Delay in ms: " + Settings.getDelayTime() + "\n");
+
         char choice;
         do {
             String input;

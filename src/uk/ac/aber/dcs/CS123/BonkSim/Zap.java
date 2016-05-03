@@ -10,7 +10,6 @@ public class Zap
     /* Static Variables */
     private static long productionCount;
 
-    public static long getProductionCount() { return productionCount; }
 
     /* Instance Variables */
     private String name;
@@ -30,6 +29,8 @@ public class Zap
         room.killBonks();
         /* Move */
         move();
+        /* Prevents the zap from moving a second time if it runs into a room which hasn't yet performed its cycle. */
+        super.act();
     }
 
     @Override
@@ -40,16 +41,6 @@ public class Zap
     @Override
     public String toString() {
         return getLocation().toString() + " : " + name;
-    }
-
-    @Override
-    public void setLocation(Position location) {
-        super.setLocation(location);
-    }
-
-    @Override
-    public Position getLocation() {
-        return super.getLocation();
     }
 
     @Override

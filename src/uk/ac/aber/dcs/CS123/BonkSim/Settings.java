@@ -1,7 +1,6 @@
 package uk.ac.aber.dcs.CS123.BonkSim;
 
 import java.io.*;
-import java.nio.file.Files;
 import java.util.Properties;
 
 /**
@@ -75,6 +74,10 @@ public class Settings {
         setGridHeight(gridHeight);
         setDelayTime(delayTime);
     }
+
+    /**
+     * Loads settings from file to the static setting variables.
+     */
     public static void load() {
         Properties properties = new Properties();
         try {
@@ -95,6 +98,9 @@ public class Settings {
 
     }
 
+    /**
+     * Saves the current state of the settings to the file.
+     */
     public static void save() {
         try {
             Properties props = new Properties();

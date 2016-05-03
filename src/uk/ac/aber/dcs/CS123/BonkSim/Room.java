@@ -36,7 +36,7 @@ public class Room {
         beings.add(b);
         b.setLocation(position);
     }
-    
+
     /**
      * Finds a mate which is compatible with the bonk passed as a parameter and meets the eligibility defined
      * in uk.ac.aber.dcs.CS123.BonkSim.Bonk.ableToBreed()
@@ -44,14 +44,16 @@ public class Room {
      * @return Returns an eligible Mate or can return null if no eligible mate found.
      */
     public Bonk findMate(Bonk bonk) {
-        for (Being being : beings) {
-            if (being instanceof Bonk) {
-                Bonk potentialMate = (Bonk) being;
-                // If different genders.
+        if (beings.size() > 1) {
+            for (Being being : beings) {
 
-                if (!(potentialMate.getGender()==(bonk.getGender()))) {
-                    if (potentialMate.ableToBreed()) {
-                        return potentialMate;
+                if (being instanceof Bonk) {
+                    Bonk potentialMate = (Bonk) being;
+                    // If different genders.
+                    if ((potentialMate.getGender() != (bonk.getGender()))) {
+                        if (potentialMate.ableToBreed()) {
+                            return potentialMate;
+                        }
                     }
                 }
             }
@@ -93,6 +95,9 @@ public class Room {
         return bonksKilled;
     }
 
+    /**
+     * Displays the room in a minimalist manner while still showing a decent level of information
+     */
     public void displayRoom() {
         for (Being b: beings) {
             System.out.println(b.toString());
@@ -106,7 +111,6 @@ public class Room {
     public ArrayList<Position> getConnectingRooms() {
         return connectingRooms;
     }
-    /* Private Methods */
 
     public Position getPosition() {
         return position;

@@ -28,8 +28,11 @@ public class World {
         instance = new World();
         return instance;
     }
+
     /* Instance Variables */
     private Room[][] gridWorld;
+    private final boolean gridView = true;
+
     private boolean gameOver;
     private Random random;
     private int cycleCount;
@@ -102,7 +105,12 @@ public class World {
         bonkCount = getBonkCount();
         if (bonkCount == 0)
             gameOver = true;
-        displayGridWorldNicely();
+
+        if (gridView)
+            displayGridWorldNicely();
+        else
+            displayGridWorld();
+
         cycleCount ++;
     }
 
@@ -111,6 +119,7 @@ public class World {
      */
     public void endGame() {
         if (gameOver) {
+            // Sets the final cycle.
             bonkPopulations[cycleCount] = getBonkCount();
         }
     }
@@ -207,7 +216,6 @@ public class World {
         if (pos.getY() + 1 < height) {
             ret.add(new Position(pos.getX(), pos.getY() + 1));
         }
-
         return ret;
     }
     /* Private Methods*/
@@ -300,6 +308,9 @@ public class World {
         }
     }
 
+    /**
+     * Populates the rooms with  a set number of randomly placed bonks and zap.
+     */
     private void populateRooms() {
         /* Bonks */
         for (int i = 0; i < startingBonks; i++) {

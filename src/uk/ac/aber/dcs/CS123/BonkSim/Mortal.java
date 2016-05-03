@@ -5,10 +5,19 @@ package uk.ac.aber.dcs.CS123.BonkSim;
  */
 public interface Mortal {
     /**
-     * Every motral on GridWorld will have an age.
+     * Every mortal on GridWorld will have an age.
      * @return returns the age of the mortal.
      */
     int getAge();
 
+    /**
+     * Every mortal on the gridWorld must have a state of alive or dead.
+     * @return returns true if the being is alive.
+     */
     boolean isAlive();
+
+    /**
+     * Kills the being.
+     */
+    void kill();
 }

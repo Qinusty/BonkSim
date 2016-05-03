@@ -1,7 +1,5 @@
 package uk.ac.aber.dcs.CS123.BonkSim;
 
-import java.util.LinkedList;
-import java.util.Random;
 
 /**
  * Created by qinusty on 10/03/16.
@@ -18,7 +16,7 @@ public class Bonk
     private Gender gender;
     private int birthCycle;
     private int lastReproduced;
-    private int lastActed;
+
     private boolean alive;
 
     /* Public Methods */
@@ -45,78 +43,8 @@ public class Bonk
     }
 
     /**
-     * Gets the gender of the uk.ac.aber.dcs.CS123.BonkSim.Bonk
-     *
-     * @return Returns the uk.ac.aber.dcs.CS123.BonkSim.Gender of the uk.ac.aber.dcs.CS123.BonkSim.Bonk.
+     * Kills the bonk.
      */
-    public Gender getGender() {
-        return gender;
-    }
-
-    @Override
-    public int getAge() {
-        return World.getInstance().getCycleCount() - birthCycle;
-    }
-
-    public Room getRoom() {
-        return room;
-    }
-
-    public void resetLastReproduced() {
-        this.lastReproduced = World.getInstance().getCycleCount();
-    }
-
-    public int getLastReproduced() {
-        return lastReproduced;
-    }
-
-    public void resetLastActed() {
-        this.lastActed = World.getInstance().getCycleCount();
-    }
-
-    public int getLastActed() {
-        return lastActed;
-    }
-
-    /* Overriden Methods */
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public void act() throws CannotActException {
-        if (isAlive() && World.getInstance().getCycleCount() - getLastActed() > 0) {
-            /* Reproduction */
-            if (ableToBreed()) {
-                reproduce(room.findMate(this));
-            }
-            /* Move to random connecting room or stay */
-            move();
-            resetLastActed();
-        }
-    }
-
-    @Override
-    public void move() {
-        super.move();
-    }
-
-    @Override
-    public Position getLocation() {
-        return room.getPosition();
-    }
-
-    @Override
-    public void setLocation(Position location) {
-        this.room = World.getInstance().getRoom(location);
-    }
-
-    @Override
-    public boolean isAlive() {
-        return alive;
-    }
-
     public void kill() {
         this.alive = false;
     }
@@ -135,6 +63,67 @@ public class Bonk
             }
         }
         return false;
+    }
+
+    /**
+     * Gets the gender of the uk.ac.aber.dcs.CS123.BonkSim.Bonk
+     * @return Returns the uk.ac.aber.dcs.CS123.BonkSim.Gender of the uk.ac.aber.dcs.CS123.BonkSim.Bonk.
+     */
+    public Gender getGender() {
+        return gender;
+    }
+
+    @Override
+    public int getAge() {
+        return World.getInstance().getCycleCount() - birthCycle;
+    }
+
+    public Room getRoom() {
+        return room;
+    }
+
+    /**
+     * Sets the lastReproduced variable to this cycle.
+     */
+    public void resetLastReproduced() {
+        this.lastReproduced = World.getInstance().getCycleCount();
+    }
+
+    public int getLastReproduced() {
+        return lastReproduced;
+    }
+
+
+
+    /* Overridden Methods */
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void act() throws CannotActException {
+        if (isAlive() && World.getInstance().getCycleCount() - getLastActed() > 0) {
+            /* Reproduction */
+            if (ableToBreed()) {
+                reproduce(room.findMate(this));
+            }
+            /* Move to random connecting room or stay */
+            move();
+
+        }
+        super.act();
+    }
+
+    @Override
+    public void move() {
+        super.move();
+    }
+
+
+    @Override
+    public boolean isAlive() {
+        return alive;
     }
 
     @Override
@@ -185,6 +174,6 @@ public class Bonk
     }
 
     private int cyclesSinceLastReproduced() {
-        return World.getInstance().getCycleCount() - lastReproduced;
+        return World.getInstance().getCycleCount() - getLastReproduced();
     }
 }
