@@ -11,7 +11,7 @@
 				Bonks and Zaps}}
 \author{Josh Smith\\
 		jos67@aber.ac.uk}
-\lfoot{Document compiled on \today}
+\rfoot{\tiny{Document compiled on \today}}
 \date{}
 \usepackage{amsmath}
 \begin{document}
@@ -32,7 +32,11 @@ For this write-up I will be walking through some of the choices I made throughou
 This section will contain the portions of my write-up regarding the design of my assignment.
 
 \subsection{Class Diagam}
-
+The class diagram can be found on the next page due to sizing issues. If the diagram is still too small, you can find an SVG of the UML diagram inside the zip file.
+\begin{figure}[hpc]
+	\includegraphics[width=\paperwidth,angle=90]{UML}
+\end{figure}
+\newpage
 \subsection{Class Descriptions}
 This section is going to consist of a textual breakdown of each class and its primary functions.
 
@@ -91,7 +95,7 @@ The class also manages the grid which is implemented as a two-dimensional array 
 
 This function takes care of everything that needs to be done for a singular game cycle within the world. \\
 
-I chose to draw the world at the end of a cycle rather than the start of a cycle so that it shows the state of the grid world after any changes have been made. The grid is drawn through a seperate function named displayGridWorldNicely() as this is the successor to the initial function I had during the start of my project when I wanted to quickly see if things were changing without having to write out an aestheticially pleasing terminal UI. I opted against a JavaFX based UI for the grid world as this would have taken me a lot longer and I was happy with my terminal output.\\
+I chose to draw the world at the end of a cycle rather than the start of a cycle so that it shows the state of the grid world after any changes have been made. The grid is drawn through a seperate function named displayGridWorldNicely() as this is the successor to the initial function I had during the start of my project when I wanted to quickly see if things were changing without having to write out an aesthetically pleasing terminal UI. I opted against a JavaFX based UI for the grid world as this would have taken me a lot longer and I was happy with my terminal output.\\
 
 Throughout each cycle I am collecting data within the bonkPopulations variable which is of type long[] as this allows me to graphically display the changes in bonk populations for each cycle (More in section 2.2.9).
 
@@ -100,7 +104,7 @@ This class plays a very key role within the 'game' as it acts as a container for
 
 The class also keeps a list of rooms which it is 'connected' to as mentioned earlier in the section 2.2.2. These connecting rooms are used when a being is performing its move logic (See section 2.2.4). The constructor for Room takes a Position (See 2.2.5) as this allows it to know its place in the world and request information from the World such as which rooms are connected to it.\\
 
-The room stores the beings in a single list rather than seperating them by type as this helps maintain balance with the bonks/zaps acting in an order defined by their position in the list; this is a first in first out approach. The room class will also have a major job in the bonk reproduction process as it will be used to find potential mates for the bonks every cycle. The function findMate() shall be called from within the Bonk class and will check the list of beings for any bonks which are of the opposite gender and are eligible to breed this cycle. Eligibility to breed is defined in the brief as a bonk which is more than one cycle old and has not been involved in any other reproduction this cycle. To prevent this I am storing the current cycle in a variable called lastReproduced whenever the bonk reproduces and then comparing it with the current cycle to check its eligibility.  
+The room stores the beings in a single list rather than separating them by type as this helps maintain balance with the bonks/zaps acting in an order defined by their position in the list; this is a first in first out approach. The room class will also have a major job in the bonk reproduction process as it will be used to find potential mates for the bonks every cycle. The function findMate() shall be called from within the Bonk class and will check the list of beings for any bonks which are of the opposite gender and are eligible to breed this cycle. Eligibility to breed is defined in the brief as a bonk which is more than one cycle old and has not been involved in any other reproduction this cycle. To prevent this I am storing the current cycle in a variable called lastReproduced whenever the bonk reproduces and then comparing it with the current cycle to check its eligibility.  
 
 \subsubsection{MovableBeing}
 This class is an abstract class as it should never be used on its own. This class is mainly used to prevent code duplication and make use of inheritance. Both bonks and zaps are types of MovableBeings and therefore both inherit from the class. The main function this class contains is the move() functions which has the logic for random movement based on connecting rooms. I am using a static random variable rather than instantiating a new random each time the move() function is called as the java Random class uses time in milliseconds as a seed which could call issues if two Randoms are instantiated within a single millisecond which would not be unreasonable. \\
@@ -119,6 +123,10 @@ This is the second of the two beings currently in use. Zaps also inherit from Mo
 This interface is simple and could possibly be considered unnecessary but since the brief mentioned that there is a likelyhood that more mortal beings will be added in the future, this allows for less code duplication throughout these other mortal beings.\\
 
 This interface ensures that the classes which implement it have a getAge() function, an isAlive() function and a kill() function. These are the three key components to being a mortal.
+
+\subsubsection{Settings}
+This class holds all of my settings for custom simulations. The individual settings are stored as static variables and can be saved/loaded by using the static save/load functions. Any of the settings can be accessed using Settings.<SETTING>.
+  
 \section{Testing}
 Disclaimer: All testing was done on a Linux system running Fedora 23 using Oracles Java version 8.
 
@@ -128,7 +136,7 @@ This test ensures that the 'game' ends after the specified number of cycles.
 \includegraphics[width=15cm]{test1a}
 As you can see the settings are entered to set the game to run for 10 cycles.\\
 \includegraphics[width=15cm]{test1b}
-The bonks survive the turns after cycle 9 (cycle 0 is the first cycle therefore cycle 9 is the 10th cycle.) The game performs as expected and the graph is shown at the end successfully.
+The bonks survive the turns after cycle 9 (cycle 0 is the first cycle therefore cycle 9 is the 10th cycle) The game performs as expected and the graph is shown at the end successfully.
 
 \subsection{Test 2}
 This test was done straight after the first test and was done with the purpose of checking that the settings had saved and then loaded successfully.
@@ -157,10 +165,9 @@ This is a test aimed at the random positioning of beings at the start of a 'game
 This test was supposed to check that the game can handle extremes. To test this I set the starting bonks to 3 million which is larger than the size of an integer. I used a long for my productionCount value within the bonk class so I did not expect this to be an issue.\\
 \includegraphics[width=15cm]{test6}
 As you can see, the 'game' handles this fine and fills the world with bonks, despite the image not being able to show the entire grid world it shows enough to prove that the 'game' operates to expected levels.
+
 \section{Evaluation}
-This is for tomorrow.
+	Throughout my project I ran into a few issues, the main problem was the time constraint placed and how many different ideas I had flair. If I were to do the assignment again I would focus on managing my time better to complete more of these flair ideas. I would give myself 80\% for this assignment as I feel my flair could do with a little more. On the other hand, I feel like my bonk population statistics idea worked really well and sets my assignment apart from others; the code behind it wasn't too complicated however using JavaFX was new to me and I ran into a few issues when trying to implement the idea. The general implementation of the assignment went really well and I feel like I have successfully implemented all of the features required by the brief. I opted not to implement the grid world in JavaFX as this would have taken up more of my time and I wanted to make sure I put enough time into my write-up after the mini-assignment where I lost most of my marks there; however I feel that my implementation of grid world in a terminal environment looks quite nice and is very simplistic.  
 
-
- 
 
 \end{document}

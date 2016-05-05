@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
+  <zoom_level>6</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>222</x>
+      <y>348</y>
+      <w>390</w>
+      <h>372</h>
+    </coordinates>
+    <panel_attributes>uk.ac.aber.dcs.CS123.BonkSim::World
+--
+-instance: uk.ac.aber.dcs.CS123.BonkSim.World
+-gridWorld: uk.ac.aber.dcs.CS123.BonkSim.Room[][]
+-gridView: boolean
+-gameOver: boolean
+-random: java.util.Random
+-cycleCount: int
+-bonkPopulations: long[]
+-startingBonks: int
+-startingZaps: int
+-width: int
+-height: int
+--
++getInstance(): uk.ac.aber.dcs.CS123.BonkSim.World
++resetWorld(): uk.ac.aber.dcs.CS123.BonkSim.World
+-World(): ctor
++initialise(int, int, int, int, int): void
++performCycle(): void
++endGame(): void
++getBonkCount(): long
++getRoom(uk.ac.aber.dcs.CS123.BonkSim.Position): uk.ac.aber.dcs.CS123.BonkSim.Room
++getHeight(): int
++getWidth(): int
++isGameOver(): boolean
++getStartingBonks(): int
++getStartingZaps(): int
++getCycleCount(): int
++getBonkPopulations(): long[]
++calculateConnectingRooms(uk.ac.aber.dcs.CS123.BonkSim.Position): java.util.ArrayList
+-displayGridWorld(): void
+-displayGridWorldNicely(): void
+-setLengthString(java.lang.String, int): java.lang.String
+-initRooms(): void
+-populateRooms(): void
+~World(): ctor
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>636</x>
+      <y>654</y>
+      <w>240</w>
+      <h>270</h>
+    </coordinates>
+    <panel_attributes>uk.ac.aber.dcs.CS123.BonkSim::Bonk
+--
+-productionCount: long
+-name: java.lang.String
+-gender: uk.ac.aber.dcs.CS123.BonkSim.Gender
+-birthCycle: int
+-lastReproduced: int
+-alive: boolean
+--
++Bonk(uk.ac.aber.dcs.CS123.BonkSim.Gender): ctor
++Bonk(): ctor
++kill(): void
++ableToBreed(): boolean
++getGender(): uk.ac.aber.dcs.CS123.BonkSim.Gender
++getAge(): int
++getRoom(): uk.ac.aber.dcs.CS123.BonkSim.Room
++resetLastReproduced(): void
++getLastReproduced(): int
++getName(): java.lang.String
++act(): void
++move(): void
++isAlive(): boolean
++equals(java.lang.Object): boolean
++toString(): java.lang.String
+-reproduce(uk.ac.aber.dcs.CS123.BonkSim.Bonk): void
+-cyclesSinceLastReproduced(): int
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>6</x>
+      <y>156</y>
+      <w>210</w>
+      <h>270</h>
+    </coordinates>
+    <panel_attributes>uk.ac.aber.dcs.CS123.BonkSim::Settings
+--
+-FILE_NAME: java.lang.String
+-maxCycles: int
+-startingBonks: int
+-startingZaps: int
+-gridWidth: int
+-gridHeight: int
+-delayTime: int
+--
++Settings(): ctor
++getMaxCycles(): int
++setMaxCycles(int): void
++getStartingBonks(): int
++setStartingBonks(int): void
++getStartingZaps(): int
++setStartingZaps(int): void
++getGridWidth(): int
++setGridWidth(int): void
++getGridHeight(): int
++setGridHeight(int): void
++getDelayTime(): int
++setDelayTime(int): void
++modifyAllSettings(int, int, int, int, int, int): void
++load(): void
++save(): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>306</x>
+      <y>156</y>
+      <w>198</w>
+      <h>156</h>
+    </coordinates>
+    <panel_attributes>uk.ac.aber.dcs.CS123.BonkSim::GameEngine
+--
+-cycleMax: int
+-scanner: java.util.Scanner
+-world: uk.ac.aber.dcs.CS123.BonkSim.World
+-delayTime: int
+--
++GameEngine(): ctor
++gameLoop(): void
+-mainMenu(): void
+-defaultSimulation(): void
+-customSimulation(): void
+-savePopulationData(): java.lang.String
+-getDateTimeString(): java.lang.String
++main(java.lang.String[]): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>660</x>
+      <y>324</y>
+      <w>594</w>
+      <h>156</h>
+    </coordinates>
+    <panel_attributes>uk.ac.aber.dcs.CS123.BonkSim::Room
+--
+-position: uk.ac.aber.dcs.CS123.BonkSim.Position
+-beings: java.util.ArrayList
+-connectingRooms: java.util.ArrayList
+--
++Room(uk.ac.aber.dcs.CS123.BonkSim.Position): ctor
++getBeings(): java.util.ArrayList
++addBeing(uk.ac.aber.dcs.CS123.BonkSim.Being): void
++findMate(uk.ac.aber.dcs.CS123.BonkSim.Bonk): uk.ac.aber.dcs.CS123.BonkSim.Bonk
++moveBeing(uk.ac.aber.dcs.CS123.BonkSim.Being, uk.ac.aber.dcs.CS123.BonkSim.Position, uk.ac.aber.dcs.CS123.BonkSim.Position): void
++killBonks(): int
++displayRoom(): void
++getConnectingRooms(): java.util.ArrayList
++getPosition(): uk.ac.aber.dcs.CS123.BonkSim.Position
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>942</x>
+      <y>516</y>
+      <w>264</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>/uk.ac.aber.dcs.CS123.BonkSim::MovableBeing/
+--
+#random: java.util.Random
+#room: uk.ac.aber.dcs.CS123.BonkSim.Room
+-lastActed: int
+--
++MovableBeing(): ctor
++move(): void
++act(): void
++resetLastActed(): void
++getLastActed(): int
++getLocation(): uk.ac.aber.dcs.CS123.BonkSim.Position
++setLocation(uk.ac.aber.dcs.CS123.BonkSim.Position): void
+~MovableBeing(): ctor
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>660</x>
+      <y>168</y>
+      <w>180</w>
+      <h>126</h>
+    </coordinates>
+    <panel_attributes>uk.ac.aber.dcs.CS123.BonkSim::Position
+--
+-x: int
+-y: int
+--
++Position(int, int): ctor
++getX(): int
++setX(int): void
++getY(): int
++setY(int): void
++equals(java.lang.Object): boolean
++toString(): java.lang.String
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>930</x>
+      <y>684</y>
+      <w>162</w>
+      <h>114</h>
+    </coordinates>
+    <panel_attributes>uk.ac.aber.dcs.CS123.BonkSim::Zap
+--
+-productionCount: long
+-name: java.lang.String
+--
++Zap(): ctor
++getName(): java.lang.String
++act(): void
++move(): void
++toString(): java.lang.String
++equals(java.lang.Object): boolean
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>312</x>
+      <y>822</y>
+      <w>294</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>uk.ac.aber.dcs.CS123.BonkSim::Gender
+--
++Male: uk.ac.aber.dcs.CS123.BonkSim.Gender
++Female: uk.ac.aber.dcs.CS123.BonkSim.Gender
+-$VALUES: uk.ac.aber.dcs.CS123.BonkSim.Gender[]
+--
++values(): uk.ac.aber.dcs.CS123.BonkSim.Gender[]
++valueOf(java.lang.String): uk.ac.aber.dcs.CS123.BonkSim.Gender
+-Gender(java.lang.String, int): ctor
+~Gender(): ctor
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>648</x>
+      <y>522</y>
+      <w>264</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+uk.ac.aber.dcs.CS123.BonkSim::Being
+--
+--
++getName(): java.lang.String
++act(): void
++getLocation(): uk.ac.aber.dcs.CS123.BonkSim.Position
++setLocation(uk.ac.aber.dcs.CS123.BonkSim.Position): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>414</x>
+      <y>738</y>
+      <w>174</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+uk.ac.aber.dcs.CS123.BonkSim::Mortal
+--
+--
++getAge(): int
++isAlive(): boolean
++kill(): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>888</x>
+      <y>816</y>
+      <w>234</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>uk.ac.aber.dcs.CS123.BonkSim::CannotActException
+--
+--
++CannotActException(): ctor
++CannotActException(java.lang.String): ctor
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>396</x>
+      <y>306</y>
+      <w>18</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1</panel_attributes>
+    <additional_attributes>10.0;70.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>210</x>
+      <y>234</y>
+      <w>108</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+1</panel_attributes>
+    <additional_attributes>10.0;20.0;160.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>600</x>
+      <y>864</y>
+      <w>48</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1</panel_attributes>
+    <additional_attributes>10.0;10.0;60.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>582</x>
+      <y>768</y>
+      <w>66</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+</panel_attributes>
+    <additional_attributes>10.0;20.0;90.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>906</x>
+      <y>552</y>
+      <w>48</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;60.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1026</x>
+      <y>654</y>
+      <w>18</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>816</x>
+      <y>612</y>
+      <w>138</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>210.0;20.0;150.0;20.0;150.0;10.0;130.0;10.0;130.0;20.0;10.0;20.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>804</x>
+      <y>288</y>
+      <w>18</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>822</x>
+      <y>474</y>
+      <w>30</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1= 0..*</panel_attributes>
+    <additional_attributes>10.0;80.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>894</x>
+      <y>600</y>
+      <w>36</w>
+      <h>228</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>40.0;360.0;40.0;230.0;10.0;230.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>606</x>
+      <y>396</y>
+      <w>66</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=0..*</panel_attributes>
+    <additional_attributes>90.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+</diagram>
