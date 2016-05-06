@@ -11,6 +11,7 @@ import uk.ac.aber.dcs.CS123.BonkSim.World;
 
 /**
  * Created by qinusty on 26/04/16.
+ * @Author Josh Smith | Jos67@aber.ac.uk
  */
 public class GraphForm extends javafx.application.Application {
     @Override

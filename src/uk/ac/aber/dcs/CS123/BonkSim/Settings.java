@@ -5,6 +5,7 @@ import java.util.Properties;
 
 /**
  * Created by qinusty on 28/04/16.
+ * @Author Josh Smith | Jos67@aber.ac.uk
  */
 public class Settings {
     private static final String FILE_NAME = "settings.properties";
@@ -83,7 +84,7 @@ public class Settings {
         try {
             properties.load(new FileInputStream(FILE_NAME));
         } catch (IOException e) {
-            System.err.println("ERROR: SOMETHING HAPPENED (IO loading file, Settings Load)");
+            System.err.println("ERROR: File not found (" + FILE_NAME + ")");
         }
         try {
             maxCycles = Integer.parseInt(properties.getProperty("maxCycles"));

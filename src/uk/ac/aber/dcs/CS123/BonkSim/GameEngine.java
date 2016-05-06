@@ -17,6 +17,7 @@ import java.util.Scanner;
 
 /**
  * Created by qinusty on 10/03/16.
+ * @Author Josh Smith | Jos67@aber.ac.uk
  */
 public class GameEngine {
     private int cycleMax;
@@ -112,7 +113,7 @@ public class GameEngine {
             String input;
 
             input = scanner.nextLine();
-            if (input != null && input != "") {
+            if (input != null && !input.equals("")) {
                 choice = input.trim().toLowerCase().charAt(0);
                 if (choice == 'y' || choice == 'n') {
                     break;

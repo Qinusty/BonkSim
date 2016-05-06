@@ -5,6 +5,7 @@ import java.util.Random;
 /**
  * Developed by qinusty.
  * Version 1.0 - 12/04/16
+ * @Author Josh Smith | Jos67@aber.ac.uk
  */
 public abstract class MovableBeing implements Being {
     /* Static Variables*/
